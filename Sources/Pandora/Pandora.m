@@ -406,6 +406,8 @@ static NSString *hierrs[] = {
   NSLogd(@"Fetching stations...");
   
   NSMutableDictionary *d = [self defaultRequestDictionary];
+  d[@"returnAllStations"] = @YES;
+
   
   PandoraRequest *r = [self defaultRequestWithMethod:@"user.getStationList"];
   [r setRequest:d];

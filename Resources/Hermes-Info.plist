@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
-	<string>Hermes</string>
+	<string>$(HERMES_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
@@ -28,8 +28,6 @@
 	<string>public.app-category.music</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
-	<key>LSUIElement</key>
-	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -45,17 +43,17 @@
 	<string>HermesApp</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 	<key>OSAScriptingDefinition</key>
 	<string>Hermes.sdef</string>
 	<key>SUAllowsAutomaticUpdates</key>
-	<true/>
+	<false/>
 	<key>SUEnableAutomaticChecks</key>
-	<true/>
+	<false/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/HermesApp/HermesApp.github.io/master/versions.xml</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>dsa_pub.pem</string>
+	<string>https://updates.invalid/hermes/appcast.xml</string>
 	<key>SUShowReleaseNotes</key>
-	<true/>
+	<false/>
 </dict>
 </plist>

@@ -7,6 +7,9 @@
 #define DRAWER_NONE_HIST 2
 #define DRAWER_NONE_STA  3
 
+#define HERMES_TOOLBAR_ICON_SIZE 18.0
+NSImage *HermesToolbarImageNamed(NSString *name);
+
 @class StationsController;
 @class AuthController;
 @class PlaybackController;
@@ -19,7 +22,7 @@
 @class NetworkConnection;
 @class PreferencesController;
 
-@interface HermesAppDelegate : NSObject <NSApplicationDelegate> {
+@interface HermesAppDelegate : NSObject <NSApplicationDelegate, NSWindowRestoration> {
   /* Generic loading view */
   IBOutlet NSView *loadingView;
   IBOutlet NSProgressIndicator *loadingIcon;

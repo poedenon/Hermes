@@ -25,6 +25,10 @@ BOOL playOnStart = YES;
 - (void)_setAllPossibleLabelsToFit:(NSArray *)toolbarItemLabels;
 @end
 
+@interface PlaybackController ()
+- (void)scaleToolbarImages;
+@end
+
 @implementation PlaybackController
 
 @synthesize playing;
@@ -117,6 +121,8 @@ BOOL playOnStart = YES;
   // This has been SPI forever, but will stop the toolbar icons from sliding around.
   if ([playpause respondsToSelector:@selector(_setAllPossibleLabelsToFit:)])
     [playpause _setAllPossibleLabelsToFit:@[@"Play", @"Pause"]];
+
+  [self scaleToolbarImages];
   
   // prevent dragging the progress slider
   [playbackProgress setEnabled:NO];
@@ -164,6 +170,38 @@ BOOL playOnStart = YES;
   }
 #endif
 #endif
+}
+
+- (void)scaleToolbarImages {
+  toolbar.sizeMode = NSToolbarSizeModeSmall;
+  toolbar.displayMode = NSToolbarDisplayModeIconOnly;
+
+  playpause.image = HermesToolbarImageNamed(@"play");
+  nextSong.image = HermesToolbarImageNamed(@"fast_forward");
+  like.image = HermesToolbarImageNamed(@"thumbup");
+  dislike.image = HermesToolbarImageNamed(@"thumbdown");
+  tiredOfSong.image = HermesToolbarImageNamed(@"zzs");
+
+  for (NSToolbarItem *item in toolbar.items) {
+    NSString *name = item.image.name;
+    if (name.length > 0 && item != playpause && item != nextSong && item != like && item != dislike && item != tiredOfSong) {
+      item.image = HermesToolbarImageNamed(name);
+    } else if (item.image != nil && item.image.size.width > HERMES_TOOLBAR_ICON_SIZE + 1) {
+      NSImage *copy = [item.image copy];
+      copy.size = NSMakeSize(HERMES_TOOLBAR_ICON_SIZE, HERMES_TOOLBAR_ICON_SIZE);
+      item.image = copy;
+    }
+
+    if (item.image == nil) {
+      continue;
+    }
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:item.label ?: @""
+                                                      action:item.action
+                                               keyEquivalent:@""];
+    menuItem.target = item.target;
+    menuItem.image = item.image;
+    item.menuFormRepresentation = menuItem;
+  }
 }
 
 - (void)showToolbar {
@@ -263,12 +301,12 @@ BOOL playOnStart = YES;
 - (void)playbackStateChanged: (NSNotification *)aNotification {
   if ([playing isPlaying]) {
     NSLogd(@"Stream playing: %@", playing.playingSong);
-    [playpause setImage:[NSImage imageNamed:@"pause"]];
+    [playpause setImage:HermesToolbarImageNamed(@"pause")];
     [playpause setLabel:@"Pause"];
     [self startUpdatingProgress];
   } else if ([playing isPaused]) {
     NSLogd(@"Stream paused.");
-    [playpause setImage:[NSImage imageNamed:@"play"]];
+    [playpause setImage:HermesToolbarImageNamed(@"play")];
     [playpause setLabel:@"Play"];
     [self stopUpdatingProgress];
   }

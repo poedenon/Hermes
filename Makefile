@@ -9,7 +9,8 @@ DEBUGGER      = lldb
 
 # For some reason the project's SYMROOT setting is ignored when we specify an
 # explicit -project option. The -project option is required when using xctool.
-COMMON_OPTS   = -project Hermes.xcodeproj SYMROOT=build
+COMMON_OPTS   = -project Hermes.xcodeproj SYMROOT=build \
+                CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM= CODE_SIGNING_REQUIRED=NO
 
 all: hermes
 
@@ -22,6 +23,9 @@ travis: hermes
 
 run: hermes
 	$(HERMES)
+
+xcode:
+	open -a Xcode Hermes.xcodeproj
 
 dbg: hermes
 	$(DEBUGGER) $(HERMES)
@@ -45,4 +49,4 @@ clean:
 	$(XCB) $(COMMON_OPTS) -scheme $(SCHEME) clean
 	rm -rf build
 
-.PHONY: all hermes travis run dbg archive clean install archive upload-release
+.PHONY: all hermes travis run dbg xcode archive clean install archive upload-release

@@ -24,6 +24,16 @@
 #define DEBUG_MODE_TITLE_PREFIX @"🐞 "
 #define STATUS_BAR_MAX_WIDTH 200
 
+NSImage *HermesToolbarImageNamed(NSString *name) {
+  NSImage *src = [NSImage imageNamed:name];
+  if (src == nil) {
+    return nil;
+  }
+  NSImage *copy = [src copy];
+  copy.size = NSMakeSize(HERMES_TOOLBAR_ICON_SIZE, HERMES_TOOLBAR_ICON_SIZE);
+  return copy;
+}
+
 @interface HermesAppDelegate ()
 
 @property (readonly) NSString *hermesLogFile;
@@ -186,6 +196,10 @@
   [self updateStatusItemVisibility:nil];
 }
 
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
+  return YES;
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   NSUInteger flags = ([NSEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask);
   BOOL isOptionPressed = (flags == NSAlternateKeyMask);
@@ -281,12 +295,11 @@
 
 #pragma mark - NSWindowRestoration
 
-+ (BOOL)restoreWindowWithIdentifier:(NSString *)identifier
++ (void)restoreWindowWithIdentifier:(NSUserInterfaceItemIdentifier)identifier
                               state:(NSCoder *)state
                   completionHandler:(void (^)(NSWindow *, NSError *))done {
   [PlaybackController setPlayOnStart:NO];
   done(nil, nil);
-  return YES;
 }
 
 #pragma mark -
@@ -389,14 +402,14 @@
 
 - (void) historyShow {
   [history showDrawer];
-  [drawerToggle setImage:[NSImage imageNamed:@"radio"]];
+  [drawerToggle setImage:HermesToolbarImageNamed(@"radio")];
   [drawerToggle setToolTip: @"Show station list"];
   drawerToggle.paletteLabel = drawerToggle.label = @"Stations";
 }
 
 - (void) stationsShow {
   [stations showDrawer];
-  [drawerToggle setImage:[NSImage imageNamed:@"history"]];
+  [drawerToggle setImage:HermesToolbarImageNamed(@"history")];
   [drawerToggle setToolTip: @"Show song history"];
   drawerToggle.paletteLabel = drawerToggle.label = @"History";
 }

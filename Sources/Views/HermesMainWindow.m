@@ -10,6 +10,15 @@
 
 @implementation HermesMainWindow
 
+- (void)awakeFromNib {
+  self.titlebarAppearsTransparent = NO;
+  self.opaque = YES;
+  self.backgroundColor = [NSColor windowBackgroundColor];
+  if (@available(macOS 11.0, *)) {
+    self.toolbarStyle = NSWindowToolbarStyleExpanded;
+  }
+}
+
 - (void)sendEvent:(NSEvent *)theEvent {
   if ([theEvent type] == NSKeyDown) {
 
